@@ -1,0 +1,3 @@
+xyz.repeat()+abc+MNO.lower()
+@color(red)
+@size(20)
