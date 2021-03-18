@@ -3,24 +3,22 @@
 ```
 git clone https://github.com/victor0198utm/CMML.git
 ```
-## Continue working on a branch (a feature):
+## Start working on a new branch:
+```
+git checkout -b my_branch_name
+```
+## Make a commit with a new feature:
+```
+git add .
+git commit -m "commit_message"
+git push origin my_branch_name
+```
+## If there are changes on "main" branch, to bring them into your branch, run from your branch:
+```
+git merge main
+```
+## Other instructions:
+### Change the working branch:
 ```
 git checkout branch_name
-git pull
-```
-Make fixes or changes.
-```
-git add .
-git commit -m "commit_message"
-git push origin branch_name
-```
-## Start working on a new branch (a new feature):
-```
-git checkout -b new_branch_name
-```
-Implement the new feature.
-```
-git add .
-git commit -m "commit_message"
-git push origin new_branch_name
 ```
