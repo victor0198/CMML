@@ -33,6 +33,7 @@ std::list<Token> Lexer(std::string message){
     std::string tmp = "";
     bool token_pushed = false;
     bool need_function = false;
+    bool need_parameter = false;
     
     // lexer
     for (int i = 0; i < message.length(); i++){
@@ -69,14 +70,40 @@ std::list<Token> Lexer(std::string message){
             token_pushed = true;
         }
         if(message[i] == '(' || message[i] == ')'){
-            // create token object and push to token list
-            Token temp_token;
-            temp_token.symbols = message[i];
-            temp_token.type = ident;
-            tokens.push_back(temp_token);
-                        
-            token_pushed = true;
+
+            if(need_parameter == false){
+                // create token object and push to token list
+                Token temp_token;
+                temp_token.symbols = message[i];
+                temp_token.type = ident;
+                tokens.push_back(temp_token);
+                            
+                token_pushed = true;
+            }
+
+            else
+            {
+                int parameter_int;
+                try {
+                    parameter_int = stoi(tmp);
+                }
+                catch (int e) {
+                    std::cout<<"parameter is not a number\n";
+                }
+                Token param_token;
+                param_token.symbols = tmp;
+                param_token.type = param_int;
+                tokens.push_back(param_token);
+
+                Token open_p_token;
+                open_p_token.symbols = ")";
+                open_p_token.type = ident;
+                tokens.push_back(open_p_token);
+
+                token_pushed = true;
+            }
         }
+
         
         // reset token or add curent char to token
         if(token_pushed){
@@ -99,6 +126,33 @@ std::list<Token> Lexer(std::string message){
                 need_function = false;
                 tmp = "";
             }
+            if(tmp.compare("repeat") == 0 || tmp.compare("rightcut") == 0 || tmp.compare("leftcut") == 0){
+                // create token object and push to token list
+                Token temp_token;
+                temp_token.symbols = tmp;
+                temp_token.type = method;
+                tokens.push_back(temp_token);
+            
+                need_function = false;
+                tmp = "";
+
+                i++;
+                if(message[i] != '('){
+                    std::cout<<"no open paranthese after function"<<temp_token.symbols;
+                }
+                else if(message[i] == '('){
+                    Token open_p_token;
+                    open_p_token.symbols = "(";
+                    open_p_token.type = ident;
+                    tokens.push_back(open_p_token);
+                }
+
+                need_parameter = true;
+            }
+        }
+
+        if(need_parameter){
+
         }
     } 
     std::cout<<"symbols left:"<<tmp<<std::endl;
