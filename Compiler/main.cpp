@@ -5,7 +5,7 @@
 #include <fstream>
 
 enum Token_Type {
-    delimiter, statement, text, number, method, ident, btn, 
+    delimiter, statement, text, number, method, method_1, method_n, ident, btn, 
     qstn, gft, domain, param_int, param_1, param_2, answ_1, answ_2,  
     q_param_1, q_param_2, empty
 };
@@ -23,8 +23,19 @@ struct Tree
     Tree *children[5] = {NULL};
 };
 
+std::string error_msg = "";
+
+bool str_is_int(std::string str){
+    for(int digit_idx = 0; digit_idx < str.length(); digit_idx++){
+        if(str[digit_idx] < 48 || str[digit_idx] > 57)
+            return false;
+    }
+
+    return true;
+}
+
 std::list<Token> Lexer(std::string message){
-    
+
     // TODO: split the code into tokens
     std::list<Token> tokens;
     std::cout<<"Splitting string "<<message<< " into tokens:\n";
@@ -34,6 +45,8 @@ std::list<Token> Lexer(std::string message){
     bool token_pushed = false;
     bool need_function = false;
     bool need_parameter = false;
+    bool non_parameter_function = false;
+    int opened_parant = 0;
     
     // lexer
     for (int i = 0; i < message.length(); i++){
@@ -57,50 +70,61 @@ std::list<Token> Lexer(std::string message){
         }
         if(message[i] == '.'){
             // create token object and push to token list
-            Token temp_token;
-            temp_token.symbols = tmp;
-            temp_token.type = statement;
-            tokens.push_back(temp_token);
+            Token new_token;
+            new_token.symbols = tmp;
+            new_token.type = statement;
+            tokens.push_back(new_token);
             
-            temp_token.symbols = ".";
-            temp_token.type = ident;
-            tokens.push_back(temp_token);
+            new_token.symbols = ".";
+            new_token.type = ident;
+            tokens.push_back(new_token);
             
             need_function = true;            
             token_pushed = true;
         }
         if(message[i] == '(' || message[i] == ')'){
-
-            if(need_parameter == false){
-                // create token object and push to token list
-                Token temp_token;
-                temp_token.symbols = message[i];
-                temp_token.type = ident;
-                tokens.push_back(temp_token);
+            
+            if(need_parameter == false && non_parameter_function == false){
+                if(tmp.length() > 0){
+                    // std::cout<<tmp<<std::endl;
+                    Token tmp_token;
+                    tmp_token.symbols = tmp + ")";
+                    tmp_token.type = text;
+                    tokens.push_back(tmp_token);
+                }
                             
                 token_pushed = true;
             }
+            else{
+                if (non_parameter_function == false){
+                    if(tmp.length() == 0 && message[i] == ')'){
+                        std::cout<<"parameter is missing"<<std::endl;
+                        error_msg = "parameter is missing";
+                        return tokens;
+                    }
 
-            else
-            {
-                int parameter_int;
-                try {
-                    parameter_int = stoi(tmp);
+                    if (!str_is_int(tmp)){
+                        std::cout<<"parameter is not a number"<<std::endl;
+                        error_msg = "parameter is not a number";
+                        return tokens;
+                    }
+
+                    Token param_token;
+                    param_token.symbols = tmp;
+                    param_token.type = param_int;
+                    tokens.push_back(param_token);
                 }
-                catch (int e) {
-                    std::cout<<"parameter is not a number\n";
-                }
-                Token param_token;
-                param_token.symbols = tmp;
-                param_token.type = param_int;
-                tokens.push_back(param_token);
 
                 Token open_p_token;
-                open_p_token.symbols = ")";
+                open_p_token.symbols = message[i];
                 open_p_token.type = ident;
                 tokens.push_back(open_p_token);
 
                 token_pushed = true;
+                need_parameter = false;
+
+                if (message[i] == ')')
+                    non_parameter_function = false;
             }
         }
 
@@ -124,6 +148,7 @@ std::list<Token> Lexer(std::string message){
                 tokens.push_back(temp_token);
                 
                 need_function = false;
+                non_parameter_function = true;
                 tmp = "";
             }
             if(tmp.compare("repeat") == 0 || tmp.compare("rightcut") == 0 || tmp.compare("leftcut") == 0){
@@ -138,7 +163,9 @@ std::list<Token> Lexer(std::string message){
 
                 i++;
                 if(message[i] != '('){
-                    std::cout<<"no open paranthese after function"<<temp_token.symbols;
+                    std::cout<<"no open paranthese after function"<<temp_token.symbols<<std::endl;
+                    error_msg = "no open paranthese after function";
+                    return tokens;
                 }
                 else if(message[i] == '('){
                     Token open_p_token;
@@ -202,6 +229,12 @@ int main ()
     }
     std::cout<<" Tokens printed\n\n";
 
+
+    if (error_msg.length() > 0){
+        std::cout<<"ERROR:"<<error_msg<<std::endl;
+        return 1;
+    }
+        
 
     //----PARSER----------------------------------------------------------
 
