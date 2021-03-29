@@ -1,1 +1,1 @@
-xyz.repeat(12)
+xyz.upper()+hi:)+xyz.repeat(2))
