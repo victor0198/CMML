@@ -45,6 +45,7 @@ std::list<Token> Lexer(std::string message){
     bool token_pushed = false;
     bool need_function = false;
     bool need_parameter = false;
+    bool non_parameter_function = false;
     int opened_parant = 0;
     
     // lexer
@@ -83,7 +84,7 @@ std::list<Token> Lexer(std::string message){
         }
         if(message[i] == '(' || message[i] == ')'){
             
-            if(need_parameter == false){
+            if(need_parameter == false && non_parameter_function == false){
                 if(tmp.length() > 0){
                     // std::cout<<tmp<<std::endl;
                     Token tmp_token;
@@ -95,30 +96,35 @@ std::list<Token> Lexer(std::string message){
                 token_pushed = true;
             }
             else{
-                if(tmp.length() == 0 && message[i] == ')'){
-                    std::cout<<"parameter is missing"<<std::endl;
-                    error_msg = "parameter is missing";
-                    return tokens;
-                }
+                if (non_parameter_function == false){
+                    if(tmp.length() == 0 && message[i] == ')'){
+                        std::cout<<"parameter is missing"<<std::endl;
+                        error_msg = "parameter is missing";
+                        return tokens;
+                    }
 
-                if (!str_is_int(tmp)){
-                    std::cout<<"parameter is not a number"<<std::endl;
-                    error_msg = "parameter is not a number";
-                    return tokens;
-                }
+                    if (!str_is_int(tmp)){
+                        std::cout<<"parameter is not a number"<<std::endl;
+                        error_msg = "parameter is not a number";
+                        return tokens;
+                    }
 
-                Token param_token;
-                param_token.symbols = tmp;
-                param_token.type = param_int;
-                tokens.push_back(param_token);
+                    Token param_token;
+                    param_token.symbols = tmp;
+                    param_token.type = param_int;
+                    tokens.push_back(param_token);
+                }
 
                 Token open_p_token;
-                open_p_token.symbols = ")";
+                open_p_token.symbols = message[i];
                 open_p_token.type = ident;
                 tokens.push_back(open_p_token);
 
                 token_pushed = true;
                 need_parameter = false;
+
+                if (message[i] == ')')
+                    non_parameter_function = false;
             }
         }
 
@@ -142,6 +148,7 @@ std::list<Token> Lexer(std::string message){
                 tokens.push_back(temp_token);
                 
                 need_function = false;
+                non_parameter_function = true;
                 tmp = "";
             }
             if(tmp.compare("repeat") == 0 || tmp.compare("rightcut") == 0 || tmp.compare("leftcut") == 0){
