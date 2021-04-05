@@ -34,30 +34,76 @@ bool str_is_int(std::string str){
     return true;
 }
 
+std::list<Token> check_points(std::list<Token> tokens){
+    std::list<Token> new_tokens;
+    std::list<Token>::reverse_iterator tk;
+    std::string tmp = "";
+    bool need_point = false, need_text_and_points = false, clear_tmp = false;
+    for (tk = tokens.rbegin(); tk != tokens.rend(); tk++) {
+        if(tk->type == method || tk->type == method_1 || tk->type == method_n){
+            need_point = true;
+        }
+
+        if(need_text_and_points && (tk->type == statement || (tk->type == ident && tk->symbols.compare(".") == 0))){
+            tmp = tk->symbols + tmp;
+            continue;
+        }else{
+            need_text_and_points = false;
+            clear_tmp = true;
+        }
+
+        if(need_point && tk->type == ident && tk->symbols.compare(".") == 0){
+            need_point = false;
+            need_text_and_points = true;
+        }
+
+        if(tmp.length()!=0){
+            Token pf_token;
+            pf_token.symbols = tmp;
+            pf_token.type = statement;
+            new_tokens.push_front(pf_token);
+        }
+
+        Token pf_token;
+        pf_token.symbols = tk->symbols;
+        pf_token.type = tk->type;
+        new_tokens.push_front(pf_token);
+
+        if(clear_tmp) {
+            clear_tmp = false;
+            tmp = "";
+        }
+            
+    }
+
+    if(tmp.length()!=0){
+        Token pf_token;
+        pf_token.symbols = tmp;
+        pf_token.type = statement;
+        new_tokens.push_front(pf_token);
+    }
+
+    return new_tokens;
+}
+
 std::list<Token> Lexer(std::string message){
 
     // TODO: split the code into tokens
     std::list<Token> tokens;
-    std::cout<<"Splitting string "<<message<< " into tokens:\n";
+    std::cout<<"Splitting string \""<<message<< "\" into tokens:\n";
     
     // handy variables for lexer
     std::string tmp = "";
-    bool token_pushed = false;
-    bool need_function = false;
-    bool need_parameter = false;
-    bool non_parameter_function = false;
-    int opened_parant = 0;
+    bool token_pushed = false, need_function = false, need_parameter = false, non_parameter_function = false, need_opened_paran = false;
     
     // lexer
     for (int i = 0; i < message.length(); i++){
-        
         if(message[i] == '+'){
             // create token object and push to token list
             Token temp_token;
             
             if(tmp.compare("")!=0){
                 temp_token.symbols = tmp;
-                std::cout<<"==="<<tmp<<std::endl;
                 temp_token.type = text;
                 tokens.push_back(temp_token);    
             }
@@ -68,53 +114,68 @@ std::list<Token> Lexer(std::string message){
             
             token_pushed = true;
         }
-        if(message[i] == '.'){
+        if(message[i] == '.'){            
             // create token object and push to token list
             Token new_token;
-            new_token.symbols = tmp;
-            new_token.type = statement;
-            tokens.push_back(new_token);
+            if(tmp.length() > 0){
+                new_token.symbols = tmp;
+                new_token.type = statement;
+                tokens.push_back(new_token);
+            }
             
+            // push the "." identifier
             new_token.symbols = ".";
             new_token.type = ident;
             tokens.push_back(new_token);
             
+            // after "." was found, search for a funtion name
             need_function = true;            
             token_pushed = true;
         }
         if(message[i] == '(' || message[i] == ')'){
-            
-            if(need_parameter == false && non_parameter_function == false){
-                if(tmp.length() > 0){
-                    // std::cout<<tmp<<std::endl;
-                    Token tmp_token;
-                    tmp_token.symbols = tmp + ")";
-                    tmp_token.type = text;
-                    tokens.push_back(tmp_token);
+            if(need_opened_paran){
+                if(message[i] != '('){
+                    error_msg = "opened paranthese missing";
+                    return tokens;
                 }
-                            
-                token_pushed = true;
+                else if(message[i] == '('){
+                    Token open_p_token;
+                    open_p_token.symbols = "(";
+                    open_p_token.type = ident;
+                    tokens.push_back(open_p_token);
+                }
+
+                need_opened_paran = false;
+                continue;
             }
+
+            // treat parantheses it as text
+            if(!need_parameter && !non_parameter_function){
+                token_pushed = false;
+            }
+            // treat parentheses as identifiers
             else{
-                if (non_parameter_function == false){
+                // on a function with parameters, tokenize one parameter stored in "tmp"
+                if (!non_parameter_function){
                     if(tmp.length() == 0 && message[i] == ')'){
-                        std::cout<<"parameter is missing"<<std::endl;
                         error_msg = "parameter is missing";
                         return tokens;
                     }
 
                     if (!str_is_int(tmp)){
-                        std::cout<<"parameter is not a number"<<std::endl;
-                        error_msg = "parameter is not a number";
+                        error_msg = "parameter is not an integer";
                         return tokens;
                     }
 
+                    // add parameter to tokens list
                     Token param_token;
                     param_token.symbols = tmp;
                     param_token.type = param_int;
                     tokens.push_back(param_token);
                 }
-
+                
+                // open/ close parentheses
+                // on a function with/ without parameters
                 Token open_p_token;
                 open_p_token.symbols = message[i];
                 open_p_token.type = ident;
@@ -146,40 +207,26 @@ std::list<Token> Lexer(std::string message){
                 temp_token.symbols = tmp;
                 temp_token.type = method;
                 tokens.push_back(temp_token);
-                
+
                 need_function = false;
+                tmp = "";   
+
+                need_opened_paran = true;
                 non_parameter_function = true;
-                tmp = "";
             }
             if(tmp.compare("repeat") == 0 || tmp.compare("rightcut") == 0 || tmp.compare("leftcut") == 0){
                 // create token object and push to token list
                 Token temp_token;
                 temp_token.symbols = tmp;
-                temp_token.type = method;
+                temp_token.type = method_1;
                 tokens.push_back(temp_token);
             
                 need_function = false;
                 tmp = "";
-
-                i++;
-                if(message[i] != '('){
-                    std::cout<<"no open paranthese after function"<<temp_token.symbols<<std::endl;
-                    error_msg = "no open paranthese after function";
-                    return tokens;
-                }
-                else if(message[i] == '('){
-                    Token open_p_token;
-                    open_p_token.symbols = "(";
-                    open_p_token.type = ident;
-                    tokens.push_back(open_p_token);
-                }
-
+                
+                need_opened_paran = true;
                 need_parameter = true;
             }
-        }
-
-        if(need_parameter){
-
         }
     } 
     std::cout<<"symbols left:"<<tmp<<std::endl;
@@ -190,7 +237,20 @@ std::list<Token> Lexer(std::string message){
         temp_token.type = text;
         tokens.push_back(temp_token);
     }
-    
+
+    // TODO: handle errors when these are true
+    // std::cout<<need_function<<std::endl;
+    // std::cout<<need_parameter<<std::endl;
+    // std::cout<<need_opened_paran<<std::endl;
+
+    if(non_parameter_function){
+        error_msg = "closed parenthese missing";
+        return tokens;
+    }
+
+    // check if points are simple text
+    tokens = check_points(tokens);
+
     return tokens;
 }
 
@@ -229,17 +289,15 @@ int main ()
     }
     std::cout<<" Tokens printed\n\n";
 
-
+    // print lexer errors
     if (error_msg.length() > 0){
-        std::cout<<"ERROR:"<<error_msg<<std::endl;
+        std::cout<<"In Lexer:\nERROR:"<<error_msg<<std::endl;
         return 1;
     }
         
 
     //----PARSER----------------------------------------------------------
 
-    Tree free_nodes[100];
-    int free_nodes_id = 0;
     Tree *root;
     Tree first_node;
     root = &first_node;
@@ -248,36 +306,57 @@ int main ()
         std::cout<<"type:"<<tk->type<<" | symbols:"<<tk->symbols<<std::endl;
 
         if(tk->type == statement){
+            // std::cout<<"parsing statement"<<std::endl;
             // make main node
-            Tree *node = &free_nodes[free_nodes_id];
-            free_nodes_id++;
+            Tree *node = new Tree();
             node->token.type = tk->type;
 
             // make child node with text
-            Tree *text_node = &free_nodes[free_nodes_id];
-            free_nodes_id++;
-            text_node->token.symbols = tk->symbols;
+            Tree *text_node = new Tree();
+            // if root is text, and there was no delimiter, concatenate
+            if(root->token.type == text){
+                // std::cout<<"root symbols:"<<root->token.symbols<<std::endl;
+                text_node->token.symbols = root->token.symbols + tk->symbols;
+            }else{
+                text_node->token.symbols = tk->symbols;
+            }
+                
             text_node->token.type = text;
 
             // complete main node with function name
             tk++; 
+            std::string ident_chars = tk->symbols;
             tk++;
+            
+            // if the "." character is simple text
+            if(!(tk->type == method || tk->type == method_1 || tk->type == method_n)){
+                tk--; tk--;
+                text_node->token.symbols = text_node->token.symbols + ident_chars;
+                root = text_node;
+                continue;
+            }
+
+            std::cout<<"type:"<<tk->type<<" | symbols:"<<tk->symbols<<std::endl;
             node->token.symbols = tk->symbols;
 
             // search the "("
             tk++;
-            if(tk->symbols.compare("(") != 0) std::cout<<"ERROR: \"(\" missing\n";
-
+            if(tk->symbols.compare("(") != 0){
+                error_msg = "\"(\" missing";
+            }
             
             // TODO: parse parameters
             tk++; // now we only have ")", skip it
+            if(tk->symbols.compare(")") != 0){
+                error_msg = "\")\" missing";
+            }
 
             // build statement tree
             node->children[node->counter] = text_node;
             node->counter++;
 
             // add statement tree to main tree
-            if(root->token.type == empty){
+            if(root->token.type == empty || root->token.type == text){
                 root = node;
             }else{
                 root->children[root->counter] = node;
@@ -286,9 +365,9 @@ int main ()
         }
         
         if(tk->type == delimiter){
+            // std::cout<<"parsing delimiter"<<std::endl;
             // add the delimiter as parent node
-            Tree *new_parent = &free_nodes[free_nodes_id];
-            free_nodes_id++;
+            Tree *new_parent = new Tree();
             new_parent->token.symbols = tk->symbols;
             new_parent->token.type = tk->type;
             new_parent->children[0] = root;
@@ -296,6 +375,9 @@ int main ()
             root = new_parent; 
         }
         else if(tk->type == text){
+            // std::cout<<"parsing text"<<std::endl;
+
+
             // root is empty -> make token as root
             if(root->token.type == empty){
                 root->token.symbols = tk->symbols;
@@ -304,8 +386,7 @@ int main ()
             // root is not empty -> make token as child
             else{
                 // create child 
-                Tree *new_child = &free_nodes[free_nodes_id];
-                free_nodes_id++;
+                Tree *new_child = new Tree();
                 new_child->token.symbols = tk->symbols;
                 new_child->token.type = tk->type;
                 // add child
