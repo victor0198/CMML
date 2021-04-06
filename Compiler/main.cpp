@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <string.h>
+#include <string>
 #include <iostream>
 #include <list>
 #include <fstream>
@@ -173,13 +173,35 @@ std::list<Token> Lexer(std::string message){
                     open_p_token.type = ident;
                     tokens.push_back(open_p_token);
                 }
-
+				i++;
                 need_parameter = true;
             }
         }
 
         if(need_parameter){
+        	std::string param;
+        	int q = 0;
+        	while(message[i] != ')'){
+        		param += message[i];
+        		q++; i++;
+			}
+			
+			if(param.length() == 0 && message[i] == ')'){
+                        std::cout<<"parameter is missing"<<std::endl;
+                        error_msg = "parameter is missing";
+                        return tokens;
+                    }
 
+                    if (!str_is_int(param)){
+                        std::cout<<"parameter is not a number"<<std::endl;
+                        error_msg = "parameter is not a number";
+                        return tokens;
+                    }
+
+                    Token param_token;
+                    param_token.symbols = param;
+                    param_token.type = param_int;
+                    tokens.push_back(param_token);
         }
     } 
     std::cout<<"symbols left:"<<tmp<<std::endl;
@@ -213,7 +235,7 @@ int main ()
     newfile.open("message.txt",std::ios::in); //open a file to perform read operation using file object
     if (newfile.is_open()){   //checking whether the file is open
         std::string tp;
-        getline(newfile, tp); //read the first line from the file object and put it into string variable
+        std::getline(newfile, tp); //read the first line from the file object and put it into string variable
         message = tp;
         newfile.close(); 
     }
@@ -269,8 +291,16 @@ int main ()
             if(tk->symbols.compare("(") != 0) std::cout<<"ERROR: \"(\" missing\n";
 
             
-            // TODO: parse parameters
-            tk++; // now we only have ")", skip it
+            //parsing parameters
+            tk++; 
+            if (tk -> type == param_int){
+            	Tree *param_node = &free_nodes[free_nodes_id];
+            	free_nodes_id++;
+            	param_node -> token.type = param_int;
+        		param_node -> token.symbols = param_int;
+        		
+        		
+			}
 
             // build statement tree
             node->children[node->counter] = text_node;
@@ -313,6 +343,8 @@ int main ()
                 root->counter++;
             }
         }
+        
+    
     }
     std::cout<<" Tokens parsed\n";
 
