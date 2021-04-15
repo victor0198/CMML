@@ -6,7 +6,7 @@
 
 enum Token_Type {
     delimiter, statement, text, number, method, method_1, method_n, ident, btn, 
-    qstn, gft, domain, param_int, param_1, param_2, answ_1, answ_2,  
+    qstn, gft, domain, param_int, param_str, param_1, param_2, answ_1, answ_2,  
     q_param_1, q_param_2, empty
 };
 
@@ -94,7 +94,8 @@ std::list<Token> Lexer(std::string message){
     
     // handy variables for lexer
     std::string tmp = "";
-    bool token_pushed = false, need_function = false, need_parameter = false, non_parameter_function = false, need_opened_paran = false;
+    bool token_pushed = false, need_function = false, need_parameter = false, non_parameter_function = false, need_opened_paran = false, need_square_parentheses = false,
+		need_str_param = false;
     
     // lexer
     for (int i = 0; i < message.length(); i++){
@@ -161,8 +162,10 @@ std::list<Token> Lexer(std::string message){
                         error_msg = "parameter is missing";
                         return tokens;
                     }
+                    
+                    
 
-                    if (!str_is_int(tmp)){
+                    if (!need_str_param && !str_is_int(tmp)){
                         error_msg = "parameter is not an integer";
                         return tokens;
                     }
@@ -170,7 +173,12 @@ std::list<Token> Lexer(std::string message){
                     // add parameter to tokens list
                     Token param_token;
                     param_token.symbols = tmp;
-                    param_token.type = param_int;
+                    if(need_str_param){
+                    	param_token.type = param_str;
+					}
+					else{
+						param_token.type = param_int;
+					}
                     tokens.push_back(param_token);
                 }
                 
@@ -187,6 +195,45 @@ std::list<Token> Lexer(std::string message){
                 if (message[i] == ')')
                     non_parameter_function = false;
             }
+        }
+
+        if(message[i] == '[' || message[i] == ']'){
+            if(need_square_parentheses == true){
+            	std::cout<<"------------";
+            	std::cout<<message[i];
+            	std::cout<<"------------";
+                if(message[i] != '['){
+                    error_msg = "opened square parenthese missing";
+                    return tokens;
+                }
+                else if(message[i] == '['){
+                    Token open_p_token;
+                    open_p_token.symbols = "[";
+                    open_p_token.type = ident;
+                    tokens.push_back(open_p_token);
+                    
+                    need_square_parentheses = false;
+                    
+                    token_pushed = true;
+                }
+      
+                
+            }
+             if (message[i] == ']'){
+                    Token param_token;
+                    param_token.symbols = tmp;
+                    param_token.type = param_str;
+                    tokens.push_back(param_token);
+
+                    Token open_p_token;
+                    open_p_token.symbols = "]";
+                    open_p_token.type = ident;
+                    tokens.push_back(open_p_token);
+                    
+                    need_str_param = true;
+                    token_pushed = true;
+
+                }
         }
 
         
@@ -226,6 +273,19 @@ std::list<Token> Lexer(std::string message){
                 
                 need_opened_paran = true;
                 need_parameter = true;
+            }
+            if(tmp.compare("replace") == 0 ){
+                Token temp_token;
+                temp_token.symbols = tmp;
+                temp_token.type = method_n;
+                tokens.push_back(temp_token);
+
+                need_function = false;
+                tmp = "";
+
+                need_opened_paran = true;
+                need_parameter = true;
+                need_square_parentheses = true;
             }
         }
     } 
@@ -365,7 +425,34 @@ int main ()
 
 				tk++; //skip the ")"        		
 			}
-
+			
+			if(method_type == method_n && tk -> type == ident && tk -> symbols == "["){
+				tk++;
+				
+				std::cout<<"type:"<<tk -> type<<" | symbols:"<<tk -> symbols<<std::endl;
+				
+				Tree *param_1_node = new Tree();
+            	param_1_node -> token.type = tk -> type;
+        		param_1_node -> token.symbols = tk->symbols;	
+        		
+        		node->children[node->counter] = param_1_node;
+            	node->counter++;
+        		
+        		tk++;
+        		tk++;
+        		
+        		std::cout<<"type:"<<tk -> type<<" | symbols:"<<tk -> symbols<<std::endl;
+        		
+        		Tree *param_2_node = new Tree();
+            	param_2_node -> token.type = tk -> type;
+        		param_2_node -> token.symbols = tk->symbols;
+        		
+        		param_1_node->children[param_1_node->counter] = param_2_node;
+            	param_1_node->counter++;
+            	tk++;
+        		
+			}
+			
             // add statement tree to main tree
             if(root->token.type == empty || root->token.type == text){
                 root = node;
@@ -428,7 +515,9 @@ int main ()
     
     // END
     std::cout<<"END";
-    std::getchar();
+    
+    int x;
+    std::cin>>x;
     return 0;
 }
 
