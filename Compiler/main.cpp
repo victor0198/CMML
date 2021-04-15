@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <string.h>
+#include <string>
 #include <iostream>
 #include <list>
 #include <fstream>
@@ -255,7 +255,7 @@ std::list<Token> Lexer(std::string message){
 }
 
 void print_tree(Tree *t){
-    std::cout<<"<<token:"<<t->token.symbols<<std::endl;
+    std::cout<<"<<token:"<<" | symbols:\""<<t->token.symbols<<"\""<<std::endl;
     int i=0;
     while(t->children[i] != NULL){
         std::cout<<"i="<<i<<std::endl;
@@ -273,7 +273,7 @@ int main ()
     newfile.open("message.txt",std::ios::in); //open a file to perform read operation using file object
     if (newfile.is_open()){   //checking whether the file is open
         std::string tp;
-        getline(newfile, tp); //read the first line from the file object and put it into string variable
+        std::getline(newfile, tp); //read the first line from the file object and put it into string variable
         message = tp;
         newfile.close(); 
     }
@@ -285,7 +285,7 @@ int main ()
     // print token list
     std::list<Token>::iterator it;
     for (it = tokens.begin(); it != tokens.end(); it++) {
-        std::cout<<"type:"<<it->type<<" | symbols:"<<it->symbols<<std::endl;
+        std::cout<<"type:"<<it->type<<" | symbols:\""<<it->symbols<<"\""<<std::endl;
     }
     std::cout<<" Tokens printed\n\n";
 
@@ -302,11 +302,11 @@ int main ()
     Tree first_node;
     root = &first_node;
     std::list<Token>::iterator tk;
+    bool delimiter_is_next = false;
     for (tk = tokens.begin(); tk != tokens.end(); tk++) {
-        std::cout<<"type:"<<tk->type<<" | symbols:"<<tk->symbols<<std::endl;
+        std::cout<<"type:"<<tk->type<<" | symbols:\""<<tk->symbols<<"\""<<std::endl;
 
         if(tk->type == statement){
-            // std::cout<<"parsing statement"<<std::endl;
             // make main node
             Tree *node = new Tree();
             node->token.type = tk->type;
@@ -329,6 +329,7 @@ int main ()
             tk++;
             
             // if the "." character is simple text
+            Token_Type method_type = tk->type;
             if(!(tk->type == method || tk->type == method_1 || tk->type == method_n)){
                 tk--; tk--;
                 text_node->token.symbols = text_node->token.symbols + ident_chars;
@@ -339,21 +340,31 @@ int main ()
             std::cout<<"type:"<<tk->type<<" | symbols:"<<tk->symbols<<std::endl;
             node->token.symbols = tk->symbols;
 
-            // search the "("
-            tk++;
-            if(tk->symbols.compare("(") != 0){
-                error_msg = "\"(\" missing";
-            }
-            
-            // TODO: parse parameters
-            tk++; // now we only have ")", skip it
-            if(tk->symbols.compare(")") != 0){
-                error_msg = "\")\" missing";
-            }
-
             // build statement tree
             node->children[node->counter] = text_node;
             node->counter++;
+            
+            // search the "("
+            tk++;
+            if(tk->symbols.compare("(") != 0) std::cout<<"ERROR: \"(\" missing\n";            
+            
+            //parsing parameters
+            tk++; 
+            // check if it is a mothod with parameter
+            if ((method_type == method_1 || method_type == method_n) && tk -> type == param_int){
+            	Tree *param_node = new Tree();
+            	param_node -> token.type = param_int;
+        		param_node -> token.symbols = tk->symbols;		
+
+				// make param_node the children of "method node"
+				node->children[node->counter] = param_node;
+				node->counter++;
+
+				// show that the parameter was parsed
+				std::cout<<"type:"<<param_node -> token.type<<" | symbols:"<<param_node -> token.symbols<<std::endl;	
+
+				tk++; //skip the ")"        		
+			}
 
             // add statement tree to main tree
             if(root->token.type == empty || root->token.type == text){
@@ -365,7 +376,6 @@ int main ()
         }
         
         if(tk->type == delimiter){
-            // std::cout<<"parsing delimiter"<<std::endl;
             // add the delimiter as parent node
             Tree *new_parent = new Tree();
             new_parent->token.symbols = tk->symbols;
@@ -373,11 +383,19 @@ int main ()
             new_parent->children[0] = root;
             new_parent->counter++;
             root = new_parent; 
+            
+            if(delimiter_is_next){
+				tk--;
+				Tree *new_child = new Tree();
+                new_child->token.symbols = tk->symbols;
+                new_child->token.type = tk->type;
+                // add child
+                root->children[root->counter] = new_child;
+                root->counter++;
+                tk++;
+			}
         }
         else if(tk->type == text){
-            // std::cout<<"parsing text"<<std::endl;
-
-
             // root is empty -> make token as root
             if(root->token.type == empty){
                 root->token.symbols = tk->symbols;
@@ -385,6 +403,13 @@ int main ()
             }
             // root is not empty -> make token as child
             else{
+            	// firstly check if next one is "+", to make its child
+            	tk++;
+            	if(tk->type == delimiter){
+            		tk--;
+            		delimiter_is_next = true;
+            		continue;
+            	}
                 // create child 
                 Tree *new_child = new Tree();
                 new_child->token.symbols = tk->symbols;
