@@ -302,6 +302,7 @@ int main ()
     Tree first_node;
     root = &first_node;
     std::list<Token>::iterator tk;
+    bool delimiter_is_next = false;
     for (tk = tokens.begin(); tk != tokens.end(); tk++) {
         std::cout<<"type:"<<tk->type<<" | symbols:\""<<tk->symbols<<"\""<<std::endl;
 
@@ -328,6 +329,7 @@ int main ()
             tk++;
             
             // if the "." character is simple text
+            Token_Type method_type = tk->type;
             if(!(tk->type == method || tk->type == method_1 || tk->type == method_n)){
                 tk--; tk--;
                 text_node->token.symbols = text_node->token.symbols + ident_chars;
@@ -338,17 +340,18 @@ int main ()
             std::cout<<"type:"<<tk->type<<" | symbols:"<<tk->symbols<<std::endl;
             node->token.symbols = tk->symbols;
 
-            // search the "("
-            tk++;
-            if(tk->symbols.compare("(") != 0) std::cout<<"ERROR: \"(\" missing\n";
-
             // build statement tree
             node->children[node->counter] = text_node;
             node->counter++;
             
+            // search the "("
+            tk++;
+            if(tk->symbols.compare("(") != 0) std::cout<<"ERROR: \"(\" missing\n";            
+            
             //parsing parameters
             tk++; 
-            if (tk -> type == param_int){
+            // check if it is a mothod with parameter
+            if ((method_type == method_1 || method_type == method_n) && tk -> type == param_int){
             	Tree *param_node = new Tree();
             	param_node -> token.type = param_int;
         		param_node -> token.symbols = tk->symbols;		
@@ -380,6 +383,17 @@ int main ()
             new_parent->children[0] = root;
             new_parent->counter++;
             root = new_parent; 
+            
+            if(delimiter_is_next){
+				tk--;
+				Tree *new_child = new Tree();
+                new_child->token.symbols = tk->symbols;
+                new_child->token.type = tk->type;
+                // add child
+                root->children[root->counter] = new_child;
+                root->counter++;
+                tk++;
+			}
         }
         else if(tk->type == text){
             // root is empty -> make token as root
@@ -389,6 +403,13 @@ int main ()
             }
             // root is not empty -> make token as child
             else{
+            	// firstly check if next one is "+", to make its child
+            	tk++;
+            	if(tk->type == delimiter){
+            		tk--;
+            		delimiter_is_next = true;
+            		continue;
+            	}
                 // create child 
                 Tree *new_child = new Tree();
                 new_child->token.symbols = tk->symbols;
