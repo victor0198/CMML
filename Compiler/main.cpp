@@ -6,7 +6,7 @@
 
 enum Token_Type {
     delimiter, statement, text, number, method, method_1, method_n, ident, btn, 
-    qstn, gft, domain, param_int, param_str, param_1, param_2, answ_1, answ_2,  
+    qstn, gift, domain, param_int, param_str, param_1, param_2, answ_1, answ_2,  
     q_param_1, q_param_2, empty
 };
 
@@ -163,8 +163,6 @@ std::list<Token> Lexer(std::string message){
                         return tokens;
                     }
                     
-                    
-
                     if (!need_str_param && !str_is_int(tmp)){
                         error_msg = "parameter is not an integer";
                         return tokens;
@@ -199,9 +197,6 @@ std::list<Token> Lexer(std::string message){
 
         if(message[i] == '[' || message[i] == ']'){
             if(need_square_parentheses == true){
-            	std::cout<<"------------";
-            	std::cout<<message[i];
-            	std::cout<<"------------";
                 if(message[i] != '['){
                     error_msg = "opened square parenthese missing";
                     return tokens;
@@ -262,7 +257,6 @@ std::list<Token> Lexer(std::string message){
                 non_parameter_function = true;
             }
             if(tmp.compare("repeat") == 0 || tmp.compare("rightcut") == 0 || tmp.compare("leftcut") == 0){
-                // create token object and push to token list
                 Token temp_token;
                 temp_token.symbols = tmp;
                 temp_token.type = method_1;
@@ -288,7 +282,36 @@ std::list<Token> Lexer(std::string message){
                 need_square_parentheses = true;
             }
         }
+
+        if(tmp.compare("$button") == 0){
+            Token temp_token;
+            temp_token.symbols = tmp;
+            temp_token.type = btn;
+            tokens.push_back(temp_token);
+
+            need_function = false;
+            tmp = "";   
+
+            need_opened_paran = true;
+            need_parameter = true;
+            need_square_parentheses = true;
+        }
+
+        if(tmp.compare("$gift") == 0){
+            Token temp_token;
+            temp_token.symbols = tmp;
+            temp_token.type = gift;
+            tokens.push_back(temp_token);
+
+            need_function = false;
+            tmp = "";   
+
+            need_opened_paran = true;
+            need_parameter = true;
+            need_str_param = true;
+        }
     } 
+    
     std::cout<<"symbols left:"<<tmp<<std::endl;
     // add the left chars as text
     if(tmp.compare("")!=0){    
@@ -375,7 +398,6 @@ int main ()
             Tree *text_node = new Tree();
             // if root is text, and there was no delimiter, concatenate
             if(root->token.type == text){
-                // std::cout<<"root symbols:"<<root->token.symbols<<std::endl;
                 text_node->token.symbols = root->token.symbols + tk->symbols;
             }else{
                 text_node->token.symbols = tk->symbols;
@@ -410,7 +432,8 @@ int main ()
             
             //parsing parameters
             tk++; 
-            // check if it is a mothod with parameter
+
+            // for parsing method with one parameter
             if ((method_type == method_1 || method_type == method_n) && tk -> type == param_int){
             	Tree *param_node = new Tree();
             	param_node -> token.type = param_int;
@@ -426,7 +449,9 @@ int main ()
 				tk++; //skip the ")"        		
 			}
 			
-			if(method_type == method_n && tk -> type == ident && tk -> symbols == "["){
+            // for parsing multi-parameter method and button
+			if((method_type == method_n) && tk -> type == ident && tk -> symbols == "["){
+                // get next token: first parameter
 				tk++;
 				
 				std::cout<<"type:"<<tk -> type<<" | symbols:"<<tk -> symbols<<std::endl;
@@ -438,7 +463,9 @@ int main ()
         		node->children[node->counter] = param_1_node;
             	node->counter++;
         		
+                // get next token: ]
         		tk++;
+                // get next token: second parameter
         		tk++;
         		
         		std::cout<<"type:"<<tk -> type<<" | symbols:"<<tk -> symbols<<std::endl;
@@ -449,6 +476,8 @@ int main ()
         		
         		param_1_node->children[param_1_node->counter] = param_2_node;
             	param_1_node->counter++;
+
+                // skip next token: )
             	tk++;
         		
 			}
@@ -490,6 +519,7 @@ int main ()
             }
             // root is not empty -> make token as child
             else{
+                print_tree(root);
             	// firstly check if next one is "+", to make its child
             	tk++;
             	if(tk->type == delimiter){
@@ -497,12 +527,13 @@ int main ()
             		delimiter_is_next = true;
             		continue;
             	}
+                tk--;
                 // create child 
-                Tree *new_child = new Tree();
-                new_child->token.symbols = tk->symbols;
-                new_child->token.type = tk->type;
+                Tree *new_txt_child = new Tree();
+                new_txt_child->token.symbols = tk->symbols;
+                new_txt_child->token.type = tk->type;
                 // add child
-                root->children[root->counter] = new_child;
+                root->children[root->counter] = new_txt_child;
                 root->counter++;
             }
         }
@@ -516,8 +547,7 @@ int main ()
     // END
     std::cout<<"END";
     
-    int x;
-    std::cin>>x;
+    std::getchar();
     return 0;
 }
 
