@@ -388,6 +388,74 @@ int main ()
     bool delimiter_is_next = false;
     for (tk = tokens.begin(); tk != tokens.end(); tk++) {
         std::cout<<"type:"<<tk->type<<" | symbols:\""<<tk->symbols<<"\""<<std::endl;
+        
+        if(tk->type == btn){
+            Tree *btn_object = new Tree();
+            btn_object -> token.type = tk -> type;
+            btn_object -> token.symbols = tk->symbols;
+            tk++;
+            if(tk->symbols.compare("(") != 0) std::cout<<"ERROR: \"(\" missing\n"; 
+            tk++;
+            if(tk->symbols.compare("[") != 0) std::cout<<"ERROR: \"(\" missing\n"; 
+            tk++;
+
+            std::cout<<"type:"<<tk -> type<<" | symbols:"<<tk -> symbols<<std::endl;
+            Tree *param_1_node = new Tree();
+            param_1_node -> token.type = tk -> type;
+            param_1_node -> token.symbols = tk->symbols;
+            btn_object->children[btn_object->counter] = param_1_node;
+            btn_object->counter++;
+            tk++;
+
+            if(tk->symbols.compare("]") != 0) std::cout<<"ERROR: \"(\" missing\n"; 
+            tk++;
+            Tree *param_2_node = new Tree();
+            param_2_node -> token.type = tk -> type;
+            param_2_node -> token.symbols = tk->symbols;
+            param_1_node->children[param_1_node->counter] = param_2_node;
+            param_1_node->counter++;
+
+            if(tk->symbols.compare(")") != 0) std::cout<<"ERROR: \"(\" missing\n"; 
+
+
+            if(root->token.type == empty || root->token.type == text){
+                root = btn_object;
+            }else{
+                root->children[root->counter] = btn_object;
+                root->counter++;
+            }
+
+        }
+
+        // $gift(**domain**)
+        if(tk->type == gift){
+            Tree *gift_object = new Tree();
+            gift_object -> token.type = tk -> type;
+            gift_object -> token.symbols = tk->symbols;
+            tk++;
+            if(tk->symbols.compare("(") != 0) std::cout<<"ERROR: \"(\" missing\n"; 
+            tk++;
+
+            std::cout<<"type:"<<tk -> type<<" | symbols:"<<tk -> symbols<<std::endl;
+            Tree *param_1 = new Tree();
+            param_1 -> token.type = tk -> type;
+            param_1 -> token.symbols = tk->symbols;
+            gift_object->children[gift_object->counter] = param_1;
+            gift_object->counter++;
+            tk++;
+
+            if(tk->symbols.compare(")") != 0) std::cout<<"ERROR: \"(\" missing\n"; 
+
+
+            if(root->token.type == empty || root->token.type == text){
+                root = gift_object;
+            }else{
+                root->children[root->counter] = gift_object;
+                root->counter++;
+            }
+
+        }
+
 
         if(tk->type == statement){
             // make main node
