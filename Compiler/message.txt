@@ -1,8 +1,3 @@
-$gift(newyear)
-
------
- - lower, upper, repeat: WOW (: YOU CAME BACK IN TOWN.. :D.lower() +hi! :) (: didn't saw you for a long time.. i miss you!.upper() +:D.repeat(3)
- - rightcut, leftcut: 
- - replace: Ieri la ora 13.15 am finisat perechile.replace([Ieri]Azi)
- - button: $button([I have good news]I am pregnant! :D)
- 
+$question(Let’s go for a walk!)[Accept][Decline]{[super!]ok :)}
+@color(white)
+@size(14)

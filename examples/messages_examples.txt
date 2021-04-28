@@ -1,0 +1,13 @@
+functions:
+ - lower, upper:		 HI! :) (: DIDN'T SEE YOU FOR A LONG TIME,.lower()+ can we meet?
+ - repeat: 				 i miss you!.upper() +:D.repeat(5)
+ - rightcut, leftcut:    I know he is a football player.leftcut(7)+? I didn't knew this
+ - replace:				 I saw him today. And I spoke with him today too..replace([today]yesterday)
+ - button:				 $button([I have good news]I won the 1st place! :D)
+ - gift:				 $gift(birthday)
+ - question:			 $question(Let’s go for a walk!)[Accept][Decline]{[super!]ok :)}
+
+styles:
+@color(white)
+@size(14)
+@bgcolor(green)
