@@ -6,17 +6,18 @@
 #include <sstream>
 #include "json.hpp"
 
+
 using namespace nlohmann;
 
 enum Token_Type {
     delimiter, statement, text, number, method, method_1, method_n, ident, btn, 
-    qstn, gift, domain, param_int, param_str, param_1, param_2, answ_1, answ_2,  
-    q_param_1, q_param_2, color, size, bgcolor, param_RGB, empty
+    qstn, gift, domain, param_int, param_str, param_1, param_2, answer_1, answer_2,  
+    response_1, response_2, color, size, bgcolor, param_RGB, empty
 };
 
-std::string token_types[21] = {"delimiter", "statement", "text", "number", "method", "method_1", "method_n", "ident", "btn", 
-    "qstn", "gift", "domain", "param_int", "param_str", "param_1", "param_2", "answ_1", "answ_2",  
-    "q_param_1", "q_param_2", "empty"};
+std::string token_types[25] = {"delimiter", "statement", "text", "number", "method", "method_1", "method_n", "parentheses", "btn", 
+    "qstn", "gift", "domain", "param_int", "param_str", "param_1", "param_2", "answer_1", "answer_2",  
+    "response_1", "response_2", "color", "size", "bgcolor", "param_RGB", "empty"};
 
 struct Token
 {  
@@ -197,7 +198,7 @@ std::list<Token> Lexer(std::string message){
                     // add parameter to tokens list
                     Token param_token;
                     param_token.symbols = tmp;
-                    if(need_str_param){
+                    if(need_str_param || is_question == 1){
                     	param_token.type = param_str;
 					}
 					else if(need_rgb_param){
@@ -254,7 +255,15 @@ std::list<Token> Lexer(std::string message){
                 }
                 Token param_token;
                 param_token.symbols = tmp;
-                param_token.type = param_str;
+                //std::cout<<"|||"<<is_question<<std::endl;
+                if(is_question == 2)
+                    param_token.type = answer_1;
+                else if(is_question == 3)
+                    param_token.type = answer_2;
+                else if(is_question == 4)
+                    param_token.type = response_1;
+                else 
+                    param_token.type = param_str;
                 tokens.push_back(param_token);
 
                 Token open_p_token;
@@ -303,7 +312,11 @@ std::list<Token> Lexer(std::string message){
                 }
                 Token param_token;
                 param_token.symbols = tmp;
-                param_token.type = param_str;
+                //std::cout<<"|||"<<is_question<<std::endl;
+                if(is_question == 4)
+                    param_token.type = response_2;
+                else 
+                    param_token.type = param_str;
                 tokens.push_back(param_token);
 
                 Token open_p_token;
@@ -616,8 +629,6 @@ std::string build_json_string(Tree *t){
     if(t->token.type == delimiter)
         str = "\"" + str + "\"";
 
-    //std::cout<<t->token.symbols<<"("<<t->token.type<<"):"<<str<<std::endl;
-
     return str;
 }
 
@@ -629,12 +640,10 @@ json tree_to_json(Tree *t)
     else if(t->token.type == qstn)
         json_string = "{ \"question\": " + json_string + " }";
     else
-        if (t->token.type == statement)
-            json_string = "{ \"message\": \"" + json_string + "\" }";
-        else
-            json_string = "{ \"message\": " + json_string + " }";
+        //if (t->token.type == statement)
+        json_string = "{ \"message\": \"" + json_string + "\" }";
 
-    //std::cout<<"R: "<<json_string<<std::endl;
+    std::cout<<"R: "<<json_string<<std::endl;
     json result = json::parse(json_string);
     return result;
 }
@@ -688,30 +697,11 @@ json style_to_json(std::list<Token> style_tokens)
     return result;
 }
 
-
-
-int main ()
+std::string analyze (std::string raw)
 {
-    // read the message from the file
-    std::fstream newfile;
-    std::string message;
-    std::string styles[3];
-    int style_idx = 0;
-    newfile.open("message.txt",std::ios::in); 
-    if (newfile.is_open()){   
-        std::string tp;
-        std::getline(newfile, tp); 
-        message = tp;
-        while(getline(newfile, tp)){
-            styles[style_idx] = tp;
-            style_idx++;
-        }
-        newfile.close(); 
-    }
-
     //----LEXER------------------------------------------------------
     // message to tokens
-    std::list<Token> tokens = Lexer(message);
+    std::list<Token> tokens = Lexer(raw);
 
     // print token list
     std::cout<<" Tokens created:\n";
@@ -723,18 +713,9 @@ int main ()
     // print lexer errors
     if (error_msg.length() > 0){
         std::cout<<"In Lexer:\nERROR:"<<error_msg<<std::endl;
-        return 1;
+        return "{\"error\":\""+error_msg+"\"}";
     }
     std::cout<<std::endl;
-    std::list<Token> style_tokens = Lexer(styles[0] + styles[1] + styles[2]);
-    for (it = style_tokens.begin(); it != style_tokens.end(); it++) {
-        std::cout<<"type:"<<token_types[it->type]<<" | symbols:\""<<it->symbols<<"\""<<std::endl;
-    }
-
-    if (error_msg.length() > 0){
-        std::cout<<"In Lexer:\nERROR:"<<error_msg<<std::endl;
-        return 1;
-    }
         
 
     //----PARSER----------------------------------------------------------
@@ -1064,15 +1045,8 @@ int main ()
     json return_obj = tree_to_json(root);
        
     std::string json_string = return_obj.dump();
-    std::cout<<"\nRESULT: "<<json_string<<std::endl;
-
-    json return_styles = style_to_json(style_tokens);
-       
-    std::string json_styles_string = return_styles.dump();
-    std::cout<<"\nSTYLES: "<<json_styles_string;
+    std::cout<<"\nRESULT: "<<json_string<<std::endl;    
     
-    
-    std::getchar();
-    return 0;
+    return json_string;
 }
 

@@ -1,3 +1,0 @@
-$question(Let’s go for a walk!)[Accept][Decline]{[super!]ok :)}
-@color(white)
-@size(14)

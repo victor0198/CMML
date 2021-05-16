@@ -1,0 +1,5 @@
+121/4/15 21:48:22: 21| i want to eat.upper()
+121/4/16 0:39:2: 16| $button([hi]lol)
+121/4/16 0:47:38: 28| me love u.replace([u]myself)
+121/4/17 1:41:16: 11| hey.upper()
+121/4/17 1:41:38: 23| $button([click here]hi)
