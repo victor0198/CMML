@@ -6,7 +6,6 @@
 #include <sstream>
 #include "json.hpp"
 
-
 using namespace nlohmann;
 
 enum Token_Type {
@@ -44,6 +43,7 @@ void print_tree(Tree *t){
 }
 
 std::string error_msg = "";
+int max_wishes = 10;
 
 bool str_is_int(std::string str){
     for(int digit_idx = 0; digit_idx < str.length(); digit_idx++){
@@ -110,11 +110,11 @@ std::list<Token> Lexer(std::string message){
 
     // TODO: split the code into tokens
     std::list<Token> tokens;
-    std::cout<<"Splitting string \""<<message<< "\" into tokens:\n";
+    std::cout<<"\nSplitting string \""<<message<< "\" into tokens:\n";
     
     // handy variables for lexer
     std::string tmp = "";
-    bool token_pushed = false, need_function = false, need_parameter = false, non_parameter_function = false, need_opened_paran = false, need_square_parentheses = false,
+    bool token_pushed = false, need_function = false, need_parameter = false, non_parameter_function = false, need_paran = false, need_square_parentheses = false,
 		need_str_param = false, need_curly = false, need_rgb_param = false;
     int is_question = 0;
     
@@ -155,10 +155,63 @@ std::list<Token> Lexer(std::string message){
             token_pushed = true;
         }
         if(message[i] == '(' || message[i] == ')'){
-            if(need_opened_paran){
-                if(message[i] != '('){
-                    error_msg = "opened parenthesis missing";
-                    return tokens;
+            if(need_paran){
+                // std::cout<<"need ()\n";
+                if(message[i] == ')'){
+
+                    // std::cout<<"-- )"<<non_parameter_function<<std::endl;
+                    // on a function with parameters, tokenize one parameter stored in "tmp"
+                    if (!non_parameter_function){
+                        // std::cout<<"P1"<<std::endl;
+                        if(tmp.length() == 0 && message[i] == ')'){
+                            error_msg = "parameter is missing";
+                            return tokens;
+                        }
+                        
+                        if (!need_str_param && !need_rgb_param && !str_is_int(tmp)){
+                            error_msg = "parameter is not an integer";
+                            return tokens;
+                        }
+
+                        // TODO:
+                        // check if parameter is RGB color
+                        if(need_rgb_param){
+                            need_rgb_param = false;
+                        }
+
+                        // add parameter to tokens list
+                        Token param_token;
+                        param_token.symbols = tmp;
+                        tmp = "";
+                        if(need_str_param || is_question == 1){
+                            param_token.type = param_str;
+                        }
+                        else if(need_rgb_param){
+                            param_token.type = param_RGB;
+                        }
+                        else{
+                            param_token.type = param_int;
+                        }
+                        tokens.push_back(param_token);
+                    }
+                    
+                    // open/ close parentheses
+                    // on a function with/ without parameters
+                    Token open_p_token;
+                    open_p_token.symbols = message[i];
+                    open_p_token.type = ident;
+                    tokens.push_back(open_p_token);
+
+                    token_pushed = true;
+                    need_parameter = false;
+                    non_parameter_function = false;
+                    need_paran = false;
+
+                    if(is_question == 1){
+                        is_question++;
+                        need_square_parentheses = true;
+                        continue;
+                    }
                 }
                 else if(message[i] == '('){
                     Token open_p_token;
@@ -167,7 +220,7 @@ std::list<Token> Lexer(std::string message){
                     tokens.push_back(open_p_token);
                 }
 
-                need_opened_paran = false;
+                
                 continue;
             }
 
@@ -175,84 +228,11 @@ std::list<Token> Lexer(std::string message){
             if(!need_parameter && !non_parameter_function){
                 token_pushed = false;
             }
-            // treat parentheses as identifiers
-            else{
-                // on a function with parameters, tokenize one parameter stored in "tmp"
-                if (!non_parameter_function){
-                    if(tmp.length() == 0 && message[i] == ')'){
-                        error_msg = "parameter is missing";
-                        return tokens;
-                    }
-                    
-                    if (!need_str_param && !need_rgb_param && !str_is_int(tmp)){
-                        error_msg = "parameter is not an integer";
-                        return tokens;
-                    }
-
-                    // TODO:
-                    // check if parameter is RGB color
-                    if(need_rgb_param){
-                        need_rgb_param = false;
-                    }
-
-                    // add parameter to tokens list
-                    Token param_token;
-                    param_token.symbols = tmp;
-                    if(need_str_param || is_question == 1){
-                    	param_token.type = param_str;
-					}
-					else if(need_rgb_param){
-                        param_token.type = param_RGB;
-                    }
-                    else{
-						param_token.type = param_int;
-					}
-                    tokens.push_back(param_token);
-                }
-                
-                // open/ close parentheses
-                // on a function with/ without parameters
-                Token open_p_token;
-                open_p_token.symbols = message[i];
-                open_p_token.type = ident;
-                tokens.push_back(open_p_token);
-
-                token_pushed = true;
-                need_parameter = false;
-
-                if (message[i] == ')')
-                    non_parameter_function = false;
-                
-                if(is_question == 1){
-                    is_question++;
-                    need_square_parentheses = true;
-                    continue;
-                }
-                    
-            }
         }
 
-        if(message[i] == '[' || message[i] == ']'){
-            if(need_square_parentheses == true){
-                if(message[i] != '['){
-                    error_msg = "opened square bracket missing";
-                    return tokens;
-                }
-                else if(message[i] == '['){
-                    Token open_p_token;
-                    open_p_token.symbols = "[";
-                    open_p_token.type = ident;
-                    tokens.push_back(open_p_token);
-                    
-                    need_square_parentheses = false;
-                    token_pushed = true;
-                }
-            }
+        if(need_square_parentheses && (message[i] == '[' || message[i] == ']')){
+            
             if (message[i] == ']'){
-                if (need_square_parentheses){
-                    error_msg = "closed square parenthesis missing";
-                    return tokens;
-                }
                 Token param_token;
                 param_token.symbols = tmp;
                 //std::cout<<"|||"<<is_question<<std::endl;
@@ -284,7 +264,25 @@ std::list<Token> Lexer(std::string message){
                     need_curly = true;
                     continue;
                 }
+
+                need_square_parentheses = false;
             }
+            else if(message[i] == '['){
+                Token open_p_token;
+                open_p_token.symbols = "[";
+                open_p_token.type = ident;
+                tokens.push_back(open_p_token);
+                
+                token_pushed = true;
+            }
+            /*
+            if(message[i] != '['){
+                error_msg = "opened square bracket missing";
+                return tokens;
+            }
+        
+            */
+            
         }
 
         if(message[i] == '{' || message[i] == '}'){
@@ -351,7 +349,7 @@ std::list<Token> Lexer(std::string message){
                 need_function = false;
                 tmp = "";   
 
-                need_opened_paran = true;
+                need_paran = true;
                 non_parameter_function = true;
             }
             if(tmp.compare("repeat") == 0 || tmp.compare("rightcut") == 0 || tmp.compare("leftcut") == 0){
@@ -363,7 +361,7 @@ std::list<Token> Lexer(std::string message){
                 need_function = false;
                 tmp = "";
                 
-                need_opened_paran = true;
+                need_paran = true;
                 need_parameter = true;
             }
             if(tmp.compare("replace") == 0 ){
@@ -375,7 +373,7 @@ std::list<Token> Lexer(std::string message){
                 need_function = false;
                 tmp = "";
 
-                need_opened_paran = true;
+                need_paran = true;
                 need_parameter = true;
                 need_square_parentheses = true;
             }
@@ -389,7 +387,7 @@ std::list<Token> Lexer(std::string message){
 
             tmp = "";   
 
-            need_opened_paran = true;
+            need_paran = true;
             need_parameter = true;
             need_square_parentheses = true;
         }
@@ -402,7 +400,7 @@ std::list<Token> Lexer(std::string message){
 
             tmp = "";   
 
-            need_opened_paran = true;
+            need_paran = true;
             need_parameter = true;
             need_str_param = true;
         }
@@ -415,7 +413,7 @@ std::list<Token> Lexer(std::string message){
 
             tmp = "";   
 
-            need_opened_paran = true;
+            need_paran = true;
             need_parameter = true;
             need_str_param = true;
             is_question++;
@@ -429,7 +427,7 @@ std::list<Token> Lexer(std::string message){
 
             tmp = "";   
 
-            need_opened_paran = true;
+            need_paran = true;
             need_parameter = true;
             need_rgb_param = true;
         }
@@ -442,7 +440,7 @@ std::list<Token> Lexer(std::string message){
 
             tmp = "";   
 
-            need_opened_paran = true;
+            need_paran = true;
             need_parameter = true;
         }
 
@@ -454,7 +452,7 @@ std::list<Token> Lexer(std::string message){
 
             tmp = "";   
 
-            need_opened_paran = true;
+            need_paran = true;
             need_parameter = true;
             need_rgb_param = true;
         }
@@ -462,6 +460,7 @@ std::list<Token> Lexer(std::string message){
     
     // add the left chars as text
     if(tmp.compare("")!=0){    
+        // std::cout<<"something left"<<std::endl;
         Token temp_token;
         temp_token.symbols = tmp;
         temp_token.type = text;
@@ -497,7 +496,7 @@ bool different_structure(Token_Type type){
 
 std::string build_json_string(Tree *t){
     if(t->token.type == text){
-        std::cout<<"Found text\n";
+        // std::cout<<"Found text\n";
         return t->token.symbols;
     }
 
@@ -623,6 +622,36 @@ std::string build_json_string(Tree *t){
             }
         }
 
+        if(t->token.type == gift){
+            std::string domain_name = t->children[i]->token.symbols;
+            // std::cout<<"domain_name"<<domain_name<<std::endl;
+            if(domain_name.compare("birthday")!=0 && domain_name.compare("newyear")!=0 && domain_name.compare("christmas")!=0){
+                error_msg = "There are no wishes for this domain";
+                return "";
+            }else{
+                str = "[\"" + domain_name + "\",";
+                std::string wish;
+                std::fstream domain_file;
+                int stop_at = rand()%max_wishes;
+                domain_file.open(domain_name + ".txt",std::ios::in);
+                if (domain_file.is_open()){   //checking whether the file is open
+                    int i=0;
+                    std::string line;
+                    while(getline(domain_file, line)){ //read data from file object and put it into string.
+                        wish = line;
+                        // std::cout<<wish<<std::endl;
+                        if (i == stop_at)
+                            break;
+                        i++;
+                    }
+                    domain_file.close(); 
+                }
+                str += "\"" + wish + "\"]";
+                // std::cout<<"-end-"<<str<<std::endl;
+            }
+            
+        }
+
         i++;
     }
 
@@ -636,29 +665,40 @@ json tree_to_json(Tree *t)
 {
     std::string json_string = build_json_string(t);
     if(t->token.type == btn)
-        json_string = "{ \"button\": " + json_string + " }";
+        json_string = "{ \"type\": \"button\",\"data\": " + json_string + " }";
     else if(t->token.type == qstn)
-        json_string = "{ \"question\": " + json_string + " }";
+        json_string = "{ \"type\": \"question\",\"data\": " + json_string + " }";
+    else if(t->token.type == gift)
+        json_string = "{ \"type\": \"gift\",\"data\": " + json_string + " }";
+    else if (json_string[0] == '\"')
+        json_string = "{ \"type\": \"message\",\"data\": " + json_string + " }";
     else
-        //if (t->token.type == statement)
-        json_string = "{ \"message\": \"" + json_string + "\" }";
+        json_string = "{ \"type\": \"message\",\"data\": \"" + json_string + "\" }";
+    
 
-    std::cout<<"R: "<<json_string<<std::endl;
+    int nl_idx = json_string.find('\n');
+    while(nl_idx!=std::string::npos){
+        json_string.replace(nl_idx,1,"\\n");
+        nl_idx = json_string.find('\n');
+    }
+
+    // std::cout<<"Response: "<<json_string<<std::endl;
     json result = json::parse(json_string);
     return result;
 }
 
 json style_to_json(std::list<Token> style_tokens)
 {
-    std::string json_string = "{\"styles\": {";
+    std::string json_string = "{";
 
     // parsing styles
-
+    std::cout<<"\n Tokens parsed:\n";
     Tree *root;
     Tree first_node;
     root = &first_node;
     std::list<Token>::iterator tk;
     for (tk = style_tokens.begin(); tk != style_tokens.end(); tk++) {
+        std::cout<<"type:"<<token_types[tk->type]<<" | symbols:\""<<tk -> symbols<<"\""<<std::endl;
         if(tk->type == color || tk->type == bgcolor || tk->type == size ){
             Tree *style_object = new Tree();
             style_object -> token.type = tk -> type;
@@ -668,6 +708,7 @@ json style_to_json(std::list<Token> style_tokens)
             Tree *object_param = new Tree();
             object_param -> token.type = tk -> type;
             object_param -> token.symbols = tk->symbols;
+            std::cout<<"type:"<<token_types[tk->type]<<" | symbols:\""<<tk -> symbols<<"\""<<std::endl;
             tk++;
             style_object->children[style_object->counter] = object_param;
             style_object->counter++;
@@ -690,18 +731,50 @@ json style_to_json(std::list<Token> style_tokens)
         i++;
     }
 
-    json_string += "} }";
+    json_string += "}";
 
-    //std::cout<<"R: "<<json_string<<std::endl;
+    // std::cout<<"SSS: "<<json_string<<std::endl;
     json result = json::parse(json_string);
     return result;
 }
 
-std::string analyze (std::string raw)
+int getStylesBeginning(std::string raw_message){
+    std::size_t idx1 = raw_message.find("@color");
+    std::size_t idx2 = raw_message.find("@size");
+    std::size_t idx3 = raw_message.find("@bgcolor");
+    int smaller = idx1<idx2?idx1:idx2;
+    smaller = idx3<smaller?idx3:smaller;
+    return smaller;
+}
+
+std::string getMessage(std::string raw_message){
+    int start_char = getStylesBeginning(raw_message);
+    if(start_char!=-1)
+        raw_message.erase(start_char, raw_message.length());
+    // std::cout<<"erased styles:"<<raw_message<<std::endl;
+    return raw_message;
+}
+
+std::string getStyles(std::string raw_message){
+    int start_char = getStylesBeginning(raw_message);
+    if(start_char!=-1)
+        raw_message.erase(0, start_char);
+    else
+        raw_message = "";
+    // std::cout<<"erased message:"<<raw_message<<std::endl;
+    return raw_message;
+}
+
+std::string analyze (std::string raw_message)
 {
     //----LEXER------------------------------------------------------
     // message to tokens
-    std::list<Token> tokens = Lexer(raw);
+    std::cout<<"Message:"<<raw_message<<std::endl;
+    
+    std::string message = getMessage(raw_message);
+    std::string styles = getStyles(raw_message);
+
+    std::list<Token> tokens = Lexer(message);
 
     // print token list
     std::cout<<" Tokens created:\n";
@@ -715,7 +788,7 @@ std::string analyze (std::string raw)
         std::cout<<"In Lexer:\nERROR:"<<error_msg<<std::endl;
         return "{\"error\":\""+error_msg+"\"}";
     }
-    std::cout<<std::endl;
+    // std::cout<<std::endl;
         
 
     //----PARSER----------------------------------------------------------
@@ -733,7 +806,11 @@ std::string analyze (std::string raw)
             btn_object -> token.type = tk -> type;
             btn_object -> token.symbols = tk->symbols;
             tk++;
-            if(tk->symbols.compare("(") != 0) std::cout<<"ERROR: \"(\" missing\n"; 
+            if(tk->symbols.compare("(") != 0){
+                error_msg = "ERROR: \"(\" missing";
+                std::cout<<error_msg<<std::endl; 
+                break;
+            }
             tk++;
             if(tk->symbols.compare("[") != 0) std::cout<<"ERROR: \"[\" missing\n"; 
             tk++;
@@ -772,7 +849,11 @@ std::string analyze (std::string raw)
             gift_object -> token.type = tk -> type;
             gift_object -> token.symbols = tk->symbols;
             tk++;
-            if(tk->symbols.compare("(") != 0) std::cout<<"ERROR: \"(\" missing\n"; 
+            if(tk->symbols.compare("(") != 0){
+                error_msg = "ERROR: \"(\" missing";
+                std::cout<<error_msg<<std::endl; 
+                break;
+            }
             tk++;
 
             std::cout<<"type:"<<token_types[tk->type]<<" | symbols:\""<<tk -> symbols<<"\""<<std::endl;
@@ -801,7 +882,11 @@ std::string analyze (std::string raw)
             
             // tokenize question string
             tk++;
-            if(tk->symbols.compare("(") != 0) std::cout<<"ERROR: \"(\" missing\n"; 
+            if(tk->symbols.compare("(") != 0){
+                error_msg = "ERROR: \"(\" missing";
+                std::cout<<error_msg<<std::endl; 
+                break;
+            }
             
             tk++;
             std::cout<<"type:"<<token_types[tk->type]<<" | symbols:\""<<tk -> symbols<<"\""<<std::endl;
@@ -927,7 +1012,11 @@ std::string analyze (std::string raw)
             
             // search the "("
             tk++;
-            if(tk->symbols.compare("(") != 0) std::cout<<"ERROR: \"(\" missing\n";            
+            if(tk->symbols.compare("(") != 0){
+                error_msg = "ERROR: \"(\" missing";
+                std::cout<<error_msg<<std::endl; 
+                break;
+            }         
             
             //parsing parameters
             tk++; 
@@ -1037,15 +1126,36 @@ std::string analyze (std::string raw)
         }
     }
 
-    
-    std::cout<<"\nTHE TREE\n";
-    print_tree(root);
-    std::cout<<"END\n\n";
-      
     json return_obj = tree_to_json(root);
-       
+    std::string text_msg = return_obj["data"];
+    std::cout<<"T:"<<text_msg<<std::endl;
+    if(text_msg.length()==0){
+        return_obj["data"] = error_msg;
+        error_msg = "";
+        return_obj["type"] = "error";
+    }else{
+        if (styles.length() > 0){
+            std::list<Token> style_tokens = Lexer(styles);
+
+            // print token list
+            std::cout<<" Tokens created:\n";
+            std::list<Token>::iterator it2;
+            for (it2 = style_tokens.begin(); it2 != style_tokens.end(); it2++) {
+                std::cout<<"type:"<<token_types[it2->type]<<" | symbols:\""<<it2->symbols<<"\""<<std::endl;
+            }
+
+            json return_styles = style_to_json(style_tokens);
+            std::string json_styles_string = return_styles.dump();
+            // std::cout<<"S:"<<json_styles_string<<std::endl;
+
+            return_obj["styles"] = return_styles;
+        }
+    }
+    
+    
     std::string json_string = return_obj.dump();
-    std::cout<<"\nRESULT: "<<json_string<<std::endl;    
+    std::cout<<"\nResponse: "<<json_string<<std::endl;   
+    std::cout<<std::endl;
     
     return json_string;
 }
