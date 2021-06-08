@@ -3,3 +3,469 @@
 121/4/16 0:47:38: 28| me love u.replace([u]myself)
 121/4/17 1:41:16: 11| hey.upper()
 121/4/17 1:41:38: 23| $button([click here]hi)
+121/4/28 20:23:24: 27| button([apasa aici]saluare)
+121/4/28 20:25:2: 29| $button([apasa aici]salutare)
+121/4/30 20:56:16: 2| hi
+121/4/30 20:57:3: 2| hi
+121/4/30 20:57:36: 2| hi
+121/4/30 21:1:36: 2| hi
+121/4/30 21:1:55: 2| no
+121/4/30 21:3:38: 2| hi
+121/4/30 21:14:35: 2| hi
+121/4/30 21:15:10: 2| hi
+121/4/30 21:15:16: 3| hij
+121/4/30 21:15:20: 4| hijo
+121/4/30 21:15:28: 2| hi
+121/4/30 21:17:33: 3| hio
+121/4/30 23:50:17: 5| hiool
+121/4/30 23:52:35: 3| saa
+121/4/30 23:53:9: 1| s
+121/4/30 23:55:15: 2| sa
+121/4/30 23:56:14: 2| hi
+121/4/30 23:57:53: 2| hi
+121/4/30 23:58:0: 2| me
+121/4/30 23:58:58: 2| hi
+121/4/30 23:59:3: 2| hi
+121/4/31 0:1:21: 15| $button([hi]mm)
+121/4/31 0:3:10: 2| hi
+121/4/31 1:27:24: 2| hi
+121/4/31 1:27:41: 25| $button([click here]boom)
+121/4/31 1:30:22: 2| hi
+121/4/31 1:30:27: 2| hu
+121/4/31 1:31:2: 2| bi
+121/4/31 1:31:37: 2| bi
+121/4/31 1:37:4: 65| $question(Let’s go for a walk!)[Accept][Decline]{[super!]ok :)}
+121/4/31 1:37:39: 2| hi
+121/4/31 1:37:55: 25| $button([press here]boom)
+121/4/31 1:40:21: 33| $button([hi.upper()]let go to ..)
+121/4/31 1:40:54: 15| $button([mm]hi)
+121/4/31 1:41:12: 23| $button([mm.upper()]hi)
+121/4/31 1:41:31: 15| $button([mm]hi)
+121/4/31 1:41:42: 15| $button([mm]hi)
+121/4/31 1:43:29: 2| hi
+121/4/31 1:43:55: 26| $button([hi]what u doing?)
+121/4/31 1:44:58: 65| $question(Let’s go for a walk!)[Accept][Decline]{[super!]ok :)}
+121/4/31 1:45:15: 3| bye
+121/4/31 2:0:53: 2| hi
+121/4/31 2:1:0: 3| bye
+121/4/31 2:2:33: 2| hi
+121/4/31 2:2:48: 13| $button([a]b)
+121/4/31 12:3:12: 2| mm
+121/4/31 12:18:10: 2| hi
+121/4/31 12:18:30: 17| $button([abc]fff)
+121/5/3 15:16:38: 2| hi
+121/5/3 15:16:51: 3| bye
+121/5/3 15:31:18: 5| hello
+121/5/3 15:49:9: 69| Hi buddy ! sdvbadfdfkjbdkfjbvkdjfvbkd adbd adfb adfb adfb d dff fds b
+121/5/3 18:6:53: 3| bye
+121/5/3 18:14:20: 3| hmm
+121/5/3 18:14:24: 8| hi there
+121/5/3 18:14:36: 20| you hear me?.upper()
+121/5/3 18:14:47: 4| man?
+121/5/3 18:16:44: 5| jhbjh
+121/5/3 18:16:47: 4| jhjb
+121/5/3 18:16:53: 2| aa
+121/5/3 18:16:56: 2| aa
+121/5/3 18:17:27: 4| sdfv
+121/5/3 18:25:54: 2| hi
+121/5/3 18:27:9: 2| hi
+121/5/3 18:34:50: 4| kbdk
+121/5/3 18:37:53: 4| hiii
+121/5/3 18:37:55: 3| asc
+121/5/3 18:37:57: 3| adv
+121/5/3 18:38:4: 6| afbadf
+121/5/3 18:38:7: 17| afbavf adv ad fad
+121/5/3 18:38:9: 4| asdv
+121/5/3 18:38:11: 7| sdavasd
+121/5/3 18:38:13: 4| asdv
+121/5/3 18:38:15: 4| adsv
+121/5/3 18:38:17: 8| asdvasDV
+121/5/3 18:38:25: 17| asdadfbadfbafbafb
+121/5/3 18:38:30: 18| asdvas asd  ads aw
+121/5/3 18:39:25: 60| sdfv ad  g qrge gr er ee ergr e rg r  qer qrg q  qrgqr gqr g
+121/5/3 19:36:50: 16| $button([mm]wow)
+121/5/3 19:45:29: 38| $button([abc def ghi shf do dkjd]hehe)
+121/5/3 22:10:20: 6| privet
+121/5/3 22:10:30: 8| ourevoir
+121/5/6 0:55:50: 2| hi
+121/5/6 0:56:2: 12| hi.repeat(2)
+121/5/6 13:32:46: 24| hi.repeat(2)
+@color(red)
+121/5/6 13:33:6: 27| hi
+how are you?
+@color(red)
+121/5/6 13:52:43: 27| hi
+how are you?
+@color(red)
+121/5/6 14:8:47: 27| hi
+how are you?
+@color(red)
+121/5/6 14:14:29: 27| hi
+how are you?
+@color(red)
+121/5/6 14:34:6: 27| hi
+how are you?
+@color(red)
+121/5/6 14:36:46: 27| hi
+how are you?
+@color(red)
+121/5/6 14:37:38: 27| hi
+how are you?
+@color(red)
+121/5/6 14:46:57: 27| hi
+how are you?
+@color(red)
+121/5/6 14:47:59: 27| hi
+how are you?
+@color(red)
+121/5/6 14:50:36: 27| hi
+how are you?
+@color(red)
+121/5/6 14:51:40: 27| hi
+how are you?
+@color(red)
+121/5/6 14:52:8: 27| hi
+how are you?
+@color(red)
+121/5/6 14:52:57: 27| hi
+how are you?
+@color(red)
+121/5/6 14:54:2: 27| hi
+how are you?
+@color(red)
+121/5/6 14:54:30: 27| hi
+how are you?
+@color(red)
+121/5/6 14:55:27: 27| hi
+how are you?
+@color(red)
+121/5/6 14:56:30: 27| hi
+how are you?
+@color(red)
+121/5/6 14:58:58: 27| hi
+how are you?
+@color(red)
+121/5/6 15:0:25: 27| hi
+how are you?
+@color(red)
+121/5/6 15:0:49: 26| hi
+how are you?@color(red)
+121/5/6 15:3:1: 26| hi
+how are you?@color(red)
+121/5/6 15:3:37: 26| hi
+how are you?@color(red)
+121/5/6 15:4:0: 23| hi.repeat(2)@color(red)
+121/5/6 15:4:20: 24| nu.repeat(10)@color(red)
+121/5/6 15:4:24: 25| nu .repeat(10)@color(red)
+121/5/6 15:4:34: 28| nu .repeat(10)!!!@color(red)
+121/5/6 15:4:47: 29| nu .repeat(10)+!!!@color(red)
+121/5/6 15:5:39: 29| NO .repeat(10)+!!!@color(red)
+121/5/6 15:5:46: 18| NO .repeat(10)+!!!
+121/5/6 15:5:59: 29| NO .repeat(10)+!!!@color(red)
+121/5/6 15:6:14: 18| NO .repeat(10)+!!!
+121/5/6 15:8:28: 18| NO .repeat(10)+!!!
+121/5/6 15:9:14: 18| NO .repeat(10)+!!!
+121/5/6 15:23:33: 18| NO .repeat(10)+!!!
+121/5/6 15:25:27: 18| NO .repeat(10)+!!!
+121/5/6 15:25:34: 29| NO .repeat(10)+!!!@color(red)
+121/5/6 15:26:35: 29| NO .repeat(10)+!!!@color(red)
+121/5/6 15:27:40: 29| NO .repeat(10)+!!!@color(red)
+121/5/6 15:28:31: 29| NO .repeat(10)+!!!@color(red)
+121/5/6 15:28:48: 44| NO .repeat(10)+!!!@color(white)@bgcolor(red)
+121/5/6 15:29:25: 44| NO .repeat(10)+!!!@color(white)@bgcolor(red)
+121/5/6 15:29:32: 45| NO .repeat(10)+!!!@color(white)
+@bgcolor(red)
+121/5/6 15:29:46: 44| NO .repeat(10)+!!!@color(white)@bgcolor(red)
+121/5/6 15:29:55: 46| NO .repeat(10)+!!!
+@color(white)
+@bgcolor(red)
+121/5/6 15:30:20: 46| NO .repeat(10)+!!!
+@bgcolor(red)
+@color(white)
+121/5/6 15:30:50: 46| NO .repeat(10)+!!!
+@bgcolor(red)
+@color(white)
+121/5/6 15:31:7: 45| NO .repeat(10)+!!!
+@bgcolor(red)
+@color(#fff)
+121/5/6 15:33:29: 63| $question(aaa?)[yes][no]{[good]ah..}
+@bgcolor(red)
+@color(#fff)
+121/5/6 15:36:35: 75| $question(are you serious?)[yes][no]{[good]ah..}
+@bgcolor(red)
+@color(#fff)
+121/5/6 15:54:17: 2| hi
+121/5/6 16:22:31: 75| $question(are you serious?)[yes][no]{[good]ah..}
+@bgcolor(red)
+@color(#fff)
+121/5/6 16:24:39: 75| $question(are you serious?)[yes][no]{[good]ah..}
+@bgcolor(red)
+@color(#fff)
+121/5/6 16:28:5: 2| hi
+121/5/6 16:28:52: 2| mm
+121/5/6 16:31:20: 2| hi
+121/5/6 16:31:34: 2| jj
+121/5/6 17:34:48: 3| hie
+121/5/6 17:35:15: 2| sd
+121/5/6 17:37:9: 2| rr
+121/5/6 17:38:21: 2| ww
+121/5/6 17:40:9: 2| ww
+121/5/6 17:40:45: 2| ss
+121/5/6 17:40:56: 2| ss
+121/5/6 17:41:38: 1| e
+121/5/6 17:42:47: 3| aaa
+121/5/6 17:44:31: 2| hi
+121/5/6 17:45:32: 2| me
+121/5/7 1:32:6: 13| yo .repeat(3)
+121/5/7 1:32:33: 17| yo .repeat(5)+!! 
+121/5/7 1:37:58: 2| hi
+121/5/7 1:39:37: 2| me
+121/5/7 1:41:2: 3| you
+121/5/7 1:41:43: 2| kk
+121/5/7 1:41:50: 5| wooow
+121/5/7 1:42:7: 16| $button([hey]hi)
+121/5/7 1:50:4: 3| hmm
+121/5/7 1:50:10: 2| ok
+121/5/7 1:50:32: 17| good@color(green)
+121/5/7 1:51:38: 2| mm
+121/5/7 1:52:1: 13| ok@color(red)
+121/5/7 1:53:34: 3| hey
+121/5/7 1:54:2: 3| hey
+121/5/7 1:54:43: 1| j
+121/5/7 1:55:37: 27| question(oo?)[n][y]{[hmm]k}
+121/5/7 1:56:31: 27| question(oo?)[n][y]{[hmm]k}
+121/5/7 1:56:39: 3| hei
+121/5/7 1:56:48: 28| $question(oo?)[n][y]{[hmm]k}
+121/5/7 2:5:36: 28| $question(oo?)[n][y]{[hmm]k}
+121/5/7 2:6:12: 28| $question(oo?)[n][y]{[hmm]k}
+121/5/7 2:25:31: 28| $question(oo?)[n][y]{[hmm]k}
+121/5/7 2:29:52: 28| $question(oo?)[n][y]{[hmm]k}
+121/5/7 2:32:40: 17| $button([hi]hru?)
+121/5/7 2:51:37: 28| $question(oo?)[n][y]{[hmm]k}
+121/5/7 3:0:34: 49| $question(are you ok?)[no]definitely]{[hmm]good!}
+121/5/7 3:2:1: 49| $question(are you ok?)[no]definitely]{[hmm]good!}
+121/5/7 3:2:40: 50| $question(are you ok?)[no][definitely]{[hmm]good!}
+121/5/7 14:23:15: 2| hi
+121/5/7 14:26:30: 28| woow this is amazing.upper()
+121/5/7 14:27:51: 63| $question(do you..?)[yes, sure][definetely not]{[good]but why?}
+121/5/7 14:28:38: 71| $question(do you eat pasta?)[yes, sure][definetely not]{[good]but why?}
+121/5/7 14:30:53: 37| $button([click here please]well done)
+121/5/7 14:34:2: 13| $gift(my day)
+121/5/7 14:36:13: 10| $gift(abc)
+121/5/7 14:38:27: 10| $gift(abc)
+121/5/7 14:39:16: 10| $gift(abc)
+121/5/7 14:39:49: 11| $gift(afdb)
+121/5/7 16:3:56: 10| $gift(abc)
+121/5/7 16:27:2: 15| $gift(birthday)
+121/5/7 16:28:6: 15| $gift(birthday)
+121/5/7 16:29:20: 15| $gift(birthday)
+121/5/7 16:29:52: 15| $gift(birthday)
+121/5/7 16:29:58: 15| $gift(birthday)
+121/5/7 16:30:20: 15| $gift(birthday)
+121/5/7 16:30:25: 15| $gift(birthday)
+121/5/7 16:31:33: 15| $gift(birthday)
+121/5/7 16:31:38: 15| $gift(birthday)
+121/5/7 16:33:53: 15| $gift(birthday)
+121/5/7 16:35:30: 15| $gift(birthday)
+121/5/7 16:40:4: 15| $gift(birthday)
+121/5/7 16:40:14: 16| $gift(christmas)
+121/5/7 16:42:13: 26| $gift(birthday)@color(red)
+121/5/7 16:42:51: 15| $gift(birthday)
+121/5/7 16:45:20: 15| $gift(birthday)
+121/5/7 16:45:45: 26| $gift(birthday)@color(red)
+121/5/7 16:47:37: 27| $gift(birthday)@collor(red)
+121/5/7 16:48:8: 26| $gift(birthday)@color(red)
+121/5/7 16:48:53: 26| $gift(birthday)@color(red)
+121/5/7 16:49:9: 15| $gift(birthday)
+121/5/7 16:49:25: 26| $gift(birthday)@color(red)
+121/5/7 16:49:44: 26| $gift(birthday)@color(red)
+121/5/7 16:50:0: 15| $gift(birthday)
+121/5/7 16:50:52: 26| $gift(birthday)@color(red)
+121/5/7 16:51:46: 26| $gift(birthday)@color(red)
+121/5/7 16:52:4: 2| hi
+121/5/7 16:52:28: 26| $gift(birthday)@color(red)
+121/5/7 16:53:27: 2| hi
+121/5/7 16:53:31: 26| $gift(birthday)@color(red)
+121/5/7 16:54:32: 26| $gift(birthday)@color(red)
+121/5/7 16:54:41: 2| hi
+121/5/7 17:0:10: 40| $gift(birthday)@color(red)@bgcolor(#ddd)
+121/5/7 17:2:51: 41| $gift(birthday)@color(red)@bgcolor(green)
+121/5/7 17:4:7: 27| $gift(birthday)@color(grey)
+121/5/7 17:4:23: 37| $gift(birthday)@color(red)@size(14px)
+121/5/7 17:6:42: 2| hi
+121/5/7 17:7:0: 26| $gift(birthday)@color(red)
+121/5/7 17:7:22: 27| $gift(christmas)@color(red)
+121/5/7 17:7:32: 28| $gift(birthday)@color(white)
+121/5/7 17:7:49: 24| $button([lashbvd]aldvba)
+121/5/7 17:8:16: 33| $question(asdv??)[y][n]{[abc]dfv}
+121/5/7 17:40:56: 5| hello
+121/5/7 17:41:17: 18| hello@color(green)
+121/5/7 17:43:32: 20| hello@color(#33ff33)
+121/5/7 17:44:13: 21| hello
+@color(#33ff33)
+121/5/7 17:45:3: 20| hello@color(#33ff33)
+121/5/7 17:45:30: 20| hello@color(#33ff33)
+121/5/7 17:48:49: 20| hello@color(#33ff33)
+121/5/7 17:54:16: 20| hello@color(#33ff33)
+121/5/7 18:2:50: 20| hello@color(#33ff33)
+121/5/7 18:22:39: 20| hello@color(#33ff33)
+121/5/7 18:23:37: 20| hello@color(#33ff33)
+121/5/7 18:24:43: 20| hello@color(#33ff33)
+121/5/7 18:26:34: 20| hello@color(#33ff33)
+121/5/7 18:45:43: 51| $button([I have to say something]I found a new job)
+121/5/7 18:46:33: 5| hello
+121/5/7 18:46:40: 5| hello
+121/5/7 18:47:31: 20| hello@color(#33ff33)
+121/5/7 18:47:58: 33| $button([Good news]I got the job)
+121/5/7 18:50:22: 33| $button([Good news]I got the job)
+121/5/7 18:52:54: 33| $button([Good news]I got the job)
+121/5/7 18:55:39: 64| $question(are you ok?)[yes, i think][no]{[good][what happened?]}
+121/5/7 18:56:28: 62| $question(are you ok?)[yes, i think][no]{[good]what happened?}
+121/5/7 19:1:59: 45| $gift(birthday)@color(#2020ff)@bgcolor(white)
+121/5/7 19:11:26: 45| $gift(birthday)@color(#2020ff)@bgcolor(white)
+121/5/7 19:11:55: 30| $gift(birthday)@bgcolor(white)
+121/5/7 19:12:19: 44| $gift(birthday)@color(#2020ff)@bgcolor(gold)
+121/5/7 19:12:52: 45| $gift(birthday)@color(#2020ff)@bgcolor(white)
+121/5/7 19:13:37: 29| $gift(birthday)@bgcolor(gold)
+121/5/7 19:18:7: 32| $gift(birthday)@bgcolor(#1b8955)
+121/5/7 19:18:18: 2| hi
+121/5/7 19:18:20: 2| sd
+121/5/7 19:18:23: 2| sd
+121/5/7 19:18:24: 2| sd
+121/5/7 19:18:25: 2| sd
+121/5/7 19:18:27: 3| dsv
+121/5/7 19:18:28: 3| fds
+121/5/7 19:18:37: 32| $gift(birthday)@bgcolor(#1b8955)
+121/5/7 19:19:35: 32| $gift(birthday)@bgcolor(#1b8955)
+121/5/7 19:19:40: 32| $gift(birthday)@bgcolor(#1b8955)
+121/5/7 19:19:43: 32| $gift(birthday)@bgcolor(#1b8955)
+121/5/7 19:19:46: 32| $gift(birthday)@bgcolor(#1b8955)
+121/5/7 19:22:37: 30| $gift(christmas)@bgcolor(gold)
+121/5/7 19:23:15: 33| $gift(christmas)@bgcolor(#ee0059)
+121/5/7 19:28:53: 33| hello friend!.upper()@color(gold)
+121/5/7 19:36:44: 50| He angry. He didn't wanted to go..replace([He]She)
+121/5/7 19:37:38: 54| He was angry. He didn't wanted to go..replace([He]She)
+121/5/7 19:40:5: 33| hello friend!.upper()@color(gold)
+121/5/7 19:42:20: 52| He was angry. He didn't want to go..replace([He]She)
+121/5/7 19:49:49: 56| aaaaaaaaaaaaaaaaaaaaaaaaaaaa, nooooo.leftcut(10)+stop it
+121/5/7 19:50:22: 43| aaaaaaaaaaaaaaa, nooooo.leftcut(10)+stop it
+121/5/7 19:51:6: 42| aaaaaaaaaaaaaa, nooo!!.leftcut(10)+stop it
+121/5/7 19:51:27: 43| aaaaaaaaaaaaaa, nooo!!.leftcut(10)+ stop it
+121/5/7 21:9:0: 78| question(Let’s go for a walk!) 
+[Accept][Decline]{ 
+  [mm] 	
+ok..}  
+121/5/7 21:9:58: 58| question(Let’s go for a walk!)[Accept][Decline]{mm]ok..}
+121/5/7 21:10:17: 59| $question(Let’s go for a walk!)[Accept][Decline]{mm]ok..}
+121/5/7 21:10:52: 70| question(In the park?)[Accept][Decline]{[super…]Where do you want?
+121/5/7 21:11:14: 59| $question(Let’s go for a walk!)[Accept][Decline]{mm]ok..}
+121/5/7 21:11:42: 72| $question(In the park?)[Accept][Decline]{[super…]Where do you want?}
+121/5/7 21:12:2: 59| $question(Let’s go for a walk!)[Accept][Decline]{mm]ok..}
+121/5/7 21:12:38: 64| $question(In the park?)[Yes][No]{[super…]Where do you want?}
+121/5/7 21:19:40: 140| $question(Let’s go for a walk!)[Accept][Decline]
+{
+[
+  $question(In the park?)[Yes][No]
+  {
+  [super…]
+  Where do you want?
+  }
+]
+ok..
+}
+121/5/7 21:20:4: 63| $question(Let’s go for a walk!)[Accept][Decline]
+{
+[x]
+ok..
+}
+121/5/7 21:20:26: 74| $question(In the park?)[Yes][No]
+  {
+  [super…]
+  Where do you want?
+  }
+121/5/7 21:44:13: 74| $question(In the park?)[Yes][No]
+  {
+  [super…]
+  Where do you want?
+  }
+121/5/7 23:51:14: 74| $question(In the park?)[Yes][No]
+  {
+  [super…]
+  Where do you want?
+  }
+121/5/8 0:53:54: 24| $button(hi]how are you?)
+121/5/8 1:43:7: 10| wow.upper)
+121/5/8 1:44:29: 10| wow.upper)
+121/5/8 1:45:43: 17| wow, cool.upper()
+121/5/8 1:45:47: 16| wow, cool.upper)
+121/5/8 1:54:52: 16| wow, cool.upper)
+121/5/8 1:59:11: 16| wow, cool.upper)
+121/5/8 2:0:22: 16| wow, cool.upper)
+121/5/8 2:1:8: 16| wow, cool.upper)
+121/5/8 2:2:15: 16| wow, cool.upper)
+121/5/8 2:2:26: 16| wow, cool.upper)
+121/5/8 2:4:10: 16| wow, cool.upper)
+121/5/8 2:7:19: 8| a.upper)
+121/5/8 2:7:51: 10| r.length()
+121/5/8 2:8:24: 8| r.upper)
+121/5/8 2:9:0: 8| a.upper)
+121/5/8 2:9:25: 4| res.
+121/5/8 2:9:54: 2| hi
+121/5/8 2:10:35: 2| hi
+121/5/8 2:11:12: 2| ji
+121/5/8 2:11:20: 8| a.upper)
+121/5/8 2:11:27: 2| mm
+121/5/8 2:12:1: 4| hihi
+121/5/8 2:12:7: 8| a.upper)
+121/5/8 2:12:11: 8| found it
+121/5/8 2:12:22: 8| a.upper)
+121/5/8 2:12:25: 8| a.upper)
+121/5/8 2:12:27: 8| a.upper)
+121/5/8 2:12:30: 4| hehe
+121/5/8 2:15:13: 8| a.upper)
+121/5/8 2:16:6: 8| a.upper)
+121/5/8 2:16:42: 8| a.upper)
+121/5/8 2:16:48: 2| hm
+121/5/8 2:17:18: 2| hi
+121/5/8 2:17:28: 8| a.upper)
+121/5/8 2:18:27: 3| hii
+121/5/8 2:18:36: 9| hr.upper)
+121/5/8 2:19:7: 8| a.upper)
+121/5/8 2:20:2: 2| ji
+121/5/8 2:20:9: 8| g.upper)
+121/5/8 2:20:38: 8| a.upper)
+121/5/8 2:23:27: 2| hi
+121/5/8 2:24:17: 2| me
+121/5/8 2:24:24: 9| aa.upper)
+121/5/8 2:30:23: 2| hi
+121/5/8 2:30:31: 8| a.upper)
+121/5/8 2:30:37: 11| mmm.upper()
+121/5/8 2:35:55: 2| hi
+121/5/8 2:36:6: 8| a.upper)
+121/5/8 2:36:59: 8| a.upper)
+121/5/8 2:37:27: 8| a.upper)
+121/5/8 2:38:0: 8| a.upper)
+121/5/8 2:38:46: 8| a.upper)
+121/5/8 2:39:57: 8| a.upper)
+121/5/8 2:39:57: 8| a.upper)
+121/5/8 2:40:18: 8| a.upper)
+121/5/8 2:40:21: 8| a.upper)
+121/5/8 2:40:29: 8| a.upper)
+121/5/8 2:40:41: 8| a.upper)
+121/5/8 2:40:48: 8| a.upper)
+121/5/8 2:40:48: 8| a.upper)
+121/5/8 2:40:49: 8| a.upper)
+121/5/8 2:41:2: 4| hiii
+121/5/8 2:42:15: 2| hi
+121/5/8 2:42:24: 8| sssssssa
+121/5/8 2:45:19: 4| ssdf
+121/5/8 2:45:33: 10| wow.upper)
+121/5/8 2:46:7: 10| wow.upper)
+121/5/8 2:46:30: 11| wow.upper()
+121/5/8 2:46:46: 9| ok.upper)
+121/5/8 2:46:53: 10| ok.upper()
+121/5/8 10:32:2: 8| hi there
+121/5/8 10:32:55: 14| hi!@size(18px)
+121/5/8 10:33:12: 12| hi!@size(18)
+121/5/8 10:33:47: 11| hi@size(20)
+121/5/8 10:34:53: 13| hi:)@size(10)
